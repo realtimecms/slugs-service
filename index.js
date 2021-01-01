@@ -239,11 +239,51 @@ definition.trigger({
   },
   queuedBy: 'group',
   async execute (props, { client, service }, emit) {
-    if(!props.to && !props.redirect) throw new Error("slug must have field 'to' or 'redirefs'")
+    if(!props.to && !props.redirect) throw new Error("slug must have field 'to' or 'redirect'")
     const group = props.group
     const path = props.path
     const res = await Slug.get(`${group}_${path}`)
     if(res) throw new Error("taken")
+
+    Slug.create({id: `${group}_${path}`, group, path, to: props.to || null})
+
+    emit({
+      type: 'SlugCreated',
+      slug: `${group}_${path}`,
+      to: props.to || null,
+      redirect: props.redirect || null,
+      group, path
+    })
+
+    return path
+  }
+})
+
+definition.trigger({
+  name: 'RedirectSlug',
+  properties: {
+    group: {
+      type: String,
+      validation: ['nonEmpty']
+    },
+    path: {
+      type: String,
+      validation: ['nonEmpty']
+    },
+    to: {
+      type: String
+    },
+    redirect: {
+      type: Boolean
+    }
+  },
+  queuedBy: 'group',
+  async execute (props, { client, service }, emit) {
+    if(!props.to && !props.redirect) throw new Error("slug must have field 'to' or 'redirect'")
+    const group = props.group
+    const path = props.path
+    const res = await Slug.get(`${group}_${path}`)
+    if(!res) throw new Error("not_found")
 
     Slug.create({id: `${group}_${path}`, group, path, to: props.to || null})
 
