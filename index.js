@@ -2,9 +2,6 @@ const App = require("@live-change/framework")
 const validators = require("../validation")
 const app = new App()
 
-require('../../i18n/ejs-require.js')
-const i18n = require('../../i18n')
-
 const definition = app.createServiceDefinition({
   name: 'slugs',
   eventSourcing: true,
