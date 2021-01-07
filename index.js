@@ -82,6 +82,7 @@ definition.event({
   name: "SlugCreated",
   async execute({ slug, group, path, to, redirect }) {
     await Slug.create({ id: slug, group, path, to, redirect })
+    console.log("SLUG CREATED", slug)
   }
 })
 
@@ -127,6 +128,7 @@ definition.trigger({
       type: Number
     }
   },
+  waitForEvents: true,
   queuedBy: 'group',
   async execute (props, { client, service }, emit) {
     console.log("SLUG CREATE", props)
@@ -237,6 +239,7 @@ definition.trigger({
       type: Boolean
     }
   },
+  waitForEvents: true,
   queuedBy: 'group',
   async execute (props, { client, service }, emit) {
     if(!props.to && !props.redirect) throw new Error("slug must have field 'to' or 'redirect'")
@@ -277,6 +280,7 @@ definition.trigger({
       type: Boolean
     }
   },
+  waitForEvents: true,
   queuedBy: 'group',
   async execute (props, { client, service }, emit) {
     if(!props.to && !props.redirect) throw new Error("slug must have field 'to' or 'redirect'")
