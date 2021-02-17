@@ -1,6 +1,7 @@
 const App = require("@live-change/framework")
 const validators = require("../validation")
 const app = new App()
+const config = require("../config/slugs.js")
 
 const definition = app.createServiceDefinition({
   name: 'slugs',
@@ -150,10 +151,7 @@ definition.trigger({
       }
     } else {
       if (props.title) { // generated from title
-        path = props.title
-        path = path.replace(/[@]+/g, '-at-')
-        path = path.replace(/[_/\\\\ -]+/g, '-')
-        path = path.replace(/[^a-z0-9-]+/gi, '')
+        path = config.createFromTitle(props.title)
         const cutLength = maxLength - sufixLength /// because max id size
         while (path.length > cutLength) {
           let lastSep = path.lastIndexOf('-')
