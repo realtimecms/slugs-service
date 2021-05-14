@@ -1,6 +1,5 @@
-const App = require("@live-change/framework")
+const app = require("@live-change/framework").app()
 const validators = require("../validation")
-const app = new App()
 const config = require("../config/slugs.js")
 
 const definition = app.createServiceDefinition({
